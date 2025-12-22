@@ -28,15 +28,6 @@ export default function Home() {
               </div>
             </Link>
 
-            <nav className="hidden items-center gap-8 text-sm font-medium text-slate-400 md:flex">
-              {['AMM', 'Aggregator', 'Bridge', 'Docs'].map((item) => (
-                <a key={item} href={`#${item.toLowerCase()}`} className="relative group overflow-hidden py-1">
-                  <span className="group-hover:text-white transition-colors relative z-10">{item}</span>
-                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-300 group-hover:w-full"></span>
-                </a>
-              ))}
-            </nav>
-
             <a
               href="https://sweepnflip.io"
               target="_blank"
@@ -52,10 +43,10 @@ export default function Home() {
           {/* Hero Section */}
           <section className="relative mx-auto max-w-6xl px-6 py-32 text-center lg:py-48">
             {/* Hero Heading */}
-            <h1 className="relative mx-auto max-w-4xl text-balance text-6xl font-bold tracking-tight text-white sm:text-7xl lg:text-8xl mb-8 animate-fade-in-up">
+            <h1 className="relative mx-auto max-w-4xl text-balance text-5xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl mb-8 animate-fade-in-up">
               <span className="absolute -inset-1 bg-gradient-to-r from-orange-600 via-pink-600 to-red-600 opacity-20 blur-3xl rounded-full"></span>
               <span className="relative bg-clip-text text-transparent bg-gradient-to-b from-white via-white to-slate-400">
-                DeFi for NFTs with <span className="text-orange-500">Liquidity Pools</span>, Bridge & Aggregator
+                DeFi for NFTs with <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Liquidity Pools</span>, Bridge & Aggregator
               </span>
             </h1>
 
@@ -129,7 +120,7 @@ export default function Home() {
                       <span className="h-px w-8 bg-orange-500"></span>
                       <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-500">Automated Market Maker</h2>
                     </div>
-                    <h3 className="text-4xl font-bold text-white sm:text-5xl leading-tight">
+                    <h3 className="text-2xl font-bold text-white sm:text-3xl leading-tight">
                       NFT AMM CPMM x·y=k
                     </h3>
                     <p className="text-lg text-slate-400 leading-relaxed max-w-md">
@@ -162,13 +153,14 @@ export default function Home() {
                 <div className="order-1 lg:order-2 space-y-10">
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
-                      <span className="h-px w-8 bg-blue-500"></span>
-                      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-blue-500">Marketplace Aggregator</h2>
+                      <span className="h-px w-8 bg-orange-500"></span>
+                      <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-500">Marketplace Aggregator</h2>
                     </div>
-                    <h3 className="text-4xl font-bold text-white sm:text-5xl leading-tight">
-                      Smart Routing Across 30+ Marketplaces
+                    <h3 className="text-2xl font-bold text-white sm:text-3xl leading-tight">
+                      Flipping Aggregator Tool
                     </h3>
                     <p className="text-lg text-slate-400 leading-relaxed max-w-md">
+                      <span className="block text-white font-semibold mb-2">Smart Routing Across 30+ Marketplaces</span>
                       The best execution for regular buys, sells, and floor sweeps in one interface. Smart routing guarantees the best price across all major markets.
                     </p>
                   </div>
@@ -187,7 +179,7 @@ export default function Home() {
                       <span className="h-px w-8 bg-red-500"></span>
                       <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-red-500">Interoperability</h2>
                     </div>
-                    <h3 className="text-4xl font-bold text-white sm:text-5xl leading-tight">
+                    <h3 className="text-2xl font-bold text-white sm:text-3xl leading-tight">
                       Cross Chain NFT Bridge
                     </h3>
                     <p className="text-lg text-slate-400 leading-relaxed max-w-md">
