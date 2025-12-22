@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-brand-orange: #FF3B0D;
+  --color-brand-red: #FF0000;
+}
 
 @layer base {
   :root {
