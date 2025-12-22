@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweep n' Flip - Logo Variations</title>
+    <style>
+        body {
+            background: #020617;
+            color: white;
+            font-family: system-ui, -apple-system, sans-serif;
+            padding: 40px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2.5rem;
+        }
+
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .logo-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            /* Fixed: Allows absolute positioned children like the filter button to align to the card */
+        }
+
+        .logo-card h2 {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #94a3b8;
+        }
+
+        .logo-display {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 20px;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-display img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .specs {
+            text-align: left;
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        .specs strong {
+            color: #cbd5e1;
+        }
+
+        .gradient-demo {
+            height: 40px;
+            background: linear-gradient(to right, #EA580C, #DC2626);
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        /* NFT Table Styles */
+        .nft-row {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        /* Modal Filter Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: flex-end;
+            /* Sidebar style modal */
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            width: 350px;
+            height: 100%;
+            background: #0f172a;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateX(0);
+        }
+
+        .filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .filter-header h3 {
+            margin: 0;
+            color: #EA580C;
+            font-size: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: #64748b;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            border-color: #EA580C;
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 0 0 2px rgba(234, 88, 12, 0.2);
+        }
+
+        .range-inputs {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .range-inputs input {
+            flex: 1;
+        }
+
+        .radio-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .radio-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+            accent-color: #EA580C;
+            width: 18px;
+            height: 18px;
+        }
+
+        .radio-item span {
+            color: #cbd5e1;
+            font-size: 0.9rem;
+        }
+
+        /* Trigger Button */
+        .filter-trigger-btn {
+            background: #EA580C;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            z-index: 10;
+        }
+
+        .filter-trigger-btn:hover {
+            background: #f97316;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.3);
+        }
+
+        /* Light Theme Adjustments */
+        .light-theme-modal .modal-content {
+            background: #f8fafc;
+            border-left-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .light-theme-modal .filter-header h3 {
+            color: #EA580C;
+        }
+
+        .light-theme-modal .filter-group label {
+            color: #64748b;
+        }
+
+        .light-theme-modal .filter-group select,
+        .light-theme-modal .filter-group input {
+            background: white;
+            border-color: rgba(0, 0, 0, 0.1);
+            color: #1e293b;
+        }
+
+        .light-theme-modal .radio-item {
+            background: rgba(0, 0, 0, 0.02);
+            border-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .light-theme-modal .radio-item span {
+            color: #475569;
+        }
+
+        .light-theme-modal .close-modal {
+            color: #64748b;
+        }
+
+        .light-theme-modal .close-modal:hover {
+            color: #1e293b;
+        }
+
+        .nft-row.dark {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .nft-row.dark:hover {
+            background: rgba(255, 255, 255, 0.06) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .nft-row.light {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .nft-row.light:hover {
+            background: rgba(234, 88, 12, 0.03) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(234, 88, 12, 0.1);
+        }
+
+        #lastUpdateDark,
+        #lastUpdateLight {
+            font-family: 'Inter', system-ui, sans-serif;
+            letter-spacing: 0.02em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎨 Sweep n' Flip - Logo Variations</h1>
+
+        <div style="margin-bottom: 40px; text-align: center;">
+            <h3 style="color: #94a3b8; margin-bottom: 10px;">Gradiente de Referência</h3>
+            <div class="gradient-demo"></div>
+            <p style="color: #64748b; font-size: 0.875rem;">
+                #EA580C (Orange 600) → #DC2626 (Red 600)
+            </p>
+        </div>
+
+        <div class="logo-grid">
+            <!-- Version 1: Original with Gradient -->
+            <div class="logo-card">
+                <h2>Versão 1: Gradiente no Ícone "n'"</h2>
+                <div class="logo-display">
+                    <img src="SnF-logo-gradient.svg" alt="Logo Gradient V1">
+                </div>
+                <div class="specs">
+                    <strong>Características:</strong><br>
+                    • Texto branco<br>
+                    • Ícone "n'" com gradiente laranja→vermelho<br>
+                    • Direção: Horizontal (esquerda→direita)<br>
+                    • Cores: #EA580C → #DC2626
+                </div>
+            </div>
+
+            <!-- Version 2: White Original -->
+            <div class="logo-card">
+                <h2>Versão 2: Original (Branco)</h2>
+                <div class="logo-display">
+                    <img src="SnF-logo-white.svg" alt="Logo White">
+                </div>
+                <div class="specs">
+                    <strong>Características:</strong><br>
+                    • Texto branco<br>
+                    • Ícone "n'" vermelho sólido (#FF2E00)<br>
+                    • Versão atual em uso<br>
+                    • Sem gradiente
+                </div>
+            </div>
+
+            <!-- Version 3: Icon Only -->
+            <div class="logo-card">
+                <h2>Versão 3: Apenas Ícone</h2>
+                <div class="logo-display">
+                    <img src="snf-fav-icon-red.svg" alt="Icon Red" style="max-width: 80px;">
+                </div>
+                <div class="specs">
+                    <strong>Características:</strong><br>
+                    • Apenas o ícone "n'"<br>
+                    • Vermelho sólido<br>
+                    • Ideal para favicon<br>
+                    • Tamanho compacto
+                </div>
+            </div>
+
+            <!-- Version 4: Icon White -->
+            <div class="logo-card">
+                <h2>Versão 4: Ícone Branco</h2>
+                <div class="logo-display">
+                    <img src="snf-fav-icon-white.svg" alt="Icon White" style="max-width: 80px;">
+                </div>
+                <div class="specs">
+                    <strong>Características:</strong><br>
+                    • Apenas o ícone "n'"<br>
+                    • Branco sólido<br>
+                    • Ideal para fundos escuros<br>
+                    • Minimalista
+                </div>
+            </div>
+
+            <!-- Version 5: Light Background -->
+            <div class="logo-card">
+                <h2>Versão 5: Fundo Claro</h2>
+                <div class="logo-display" style="background: #f8fafc;">
+                    <img src="SnF-logo-light.svg" alt="Logo Light">
+                </div>
+                <div class="specs">
+                    <strong>Características:</strong><br>
+                    • Texto com gradiente laranja→vermelho<br>
+                    • Ícone "n'" preto (#231F20)<br>
+                    • Ideal para fundos brancos/claros<br>
+                    • Alto contraste
+                </div>
+            </div>
+
+            <!-- Version 6: Icon with Gradient Background -->
+            <div class="logo-card">
+                <h2>Versão 6: Ícone com Fundo Gradiente</h2>
+                <div class="logo-display">
+                    <img src="snf-icon-gradient-bg.svg" alt="Icon Gradient BG" style="max-width: 100px;">
+                </div>
+                <div class="specs">
+                    <strong>Características:</strong><br>
+                    • Ícone "n'" branco<br>
+                    • Fundo com gradiente laranja→vermelho<br>
+                    • Formato quadrado arredondado<br>
+                    • Ideal para app icons, favicons, avatares
+                </div>
+            </div>
+        </div>
+
+        <div
+            style="text-align: center; margin-top: 60px; padding: 30px; background: rgba(234, 88, 12, 0.1); border-radius: 16px; border: 1px solid rgba(234, 88, 12, 0.2);">
+            <h3 style="color: #EA580C; margin-bottom: 15px;">💡 Recomendação</h3>
+            <p style="color: #cbd5e1; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+                A <strong>Versão 1</strong> com gradiente no ícone "n'" oferece o melhor equilíbrio entre
+                modernidade e identidade visual, mantendo a legibilidade do texto enquanto adiciona
+                um elemento visual dinâmico que combina com os botões da landing page.
+            </p>
+        </div>
+
+        <!-- Financial Data List Components -->
+        <div style="margin-top: 80px;">
+            <h2 style="text-align: center; margin-bottom: 50px; font-size: 2rem;">📊 Dados de NFT em Tempo Real</h2>
+
+            <div class="logo-grid">
+                <!-- Dark Version with Live Data -->
+                <div class="logo-card" style="grid-column: span 2;">
+                    <h2>Versão Dark (Dados Reais da API)</h2>
+                    <div style="background: #0f172a; border-radius: 12px; padding: 30px;">
+                        <!-- Filter Trigger Button -->
+                        <button class="filter-trigger-btn" onclick="toggleModal('dark', true)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                            </svg>
+                            Filtros
+                        </button>
+
+                        <!-- Modal Filter Dark -->
+                        <div id="modalDark" class="modal-overlay" onclick="toggleModal('dark', false)">
+                            <div class="modal-content" onclick="event.stopPropagation()">
+                                <div class="filter-header">
+                                    <h3>Filtros Avançados</h3>
+                                    <button class="close-modal" onclick="toggleModal('dark', false)">×</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Rede</label>
+                                    <select id="chainFilter" onchange="syncFilters('dark')">
+                                        <option value="all">Todas as Redes</option>
+                                        <option value="Ethereum">Ethereum</option>
+                                        <option value="Bitcoin">Bitcoin</option>
+                                        <option value="Base">Base</option>
+                                        <option value="Ronin">Ronin</option>
+                                        <option value="BNB Chain">BNB Chain</option>
+                                        <option value="Apechain">Apechain</option>
+                                        <option value="Berachain">Berachain</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Preço Mínimo (ETH)</label>
+                                    <div class="range-inputs">
+                                        <input type="number" id="minFloor" placeholder="Min" step="0.01"
+                                            oninput="syncFilters('dark')">
+                                        <input type="number" id="maxFloor" placeholder="Max" step="0.01"
+                                            oninput="syncFilters('dark')">
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Market Cap (ETH)</label>
+                                    <div class="range-inputs">
+                                        <input type="number" id="minMCap" placeholder="Min"
+                                            oninput="syncFilters('dark')">
+                                        <input type="number" id="maxMCap" placeholder="Max"
+                                            oninput="syncFilters('dark')">
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Volume 24h (ETH)</label>
+                                    <div class="range-inputs">
+                                        <input type="number" id="minVol" placeholder="Min"
+                                            oninput="syncFilters('dark')">
+                                        <input type="number" id="maxVol" placeholder="Max"
+                                            oninput="syncFilters('dark')">
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Tipo de Token</label>
+                                    <div class="radio-list">
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenType" value="all" checked
+                                                onclick="syncFilters('dark')">
+                                            <span>All Standards</span>
+                                        </label>
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenType" value="ERC721"
+                                                onclick="syncFilters('dark')">
+                                            <span>ERC721 (Standard)</span>
+                                        </label>
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenType" value="ERC1155"
+                                                onclick="syncFilters('dark')">
+                                            <span>ERC1155 (Multi-token)</span>
+                                        </label>
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenType" value="ERC404"
+                                                onclick="syncFilters('dark')">
+                                            <span>ERC404 (Experimental)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button class="filter-trigger-btn"
+                                    style="position: static; width: 100%; margin-top: auto;"
+                                    onclick="toggleModal('dark', false)">Aplicar Filtros</button>
+                            </div>
+                        </div>
+
+                        <div id="loadingDark" style="text-align: center; color: #EA580C; padding: 40px;">
+                            <p>⏳ Carregando dados da CoinGecko API...</p>
+                        </div>
+                        <table id="tableDark"
+                            style="width: 100%; border-collapse: separate; border-spacing: 0 12px; display: none;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                    <th
+                                        style="text-align: left; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        NFT</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        Preço Mínimo</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        24h</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        Market Cap</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        Volume 24h</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBodyDark">
+                            </tbody>
+                        </table>
+                        <div id="lastUpdateDark"></div>
+                    </div>
+                    <div class="specs" style="margin-top: 20px;">
+                        <strong>Características:</strong><br>
+                        • Dados em tempo real da CoinGecko API<br>
+                        • Atualização automática a cada 5 minutos<br>
+                        • Números grandes e em destaque<br>
+                        • Indicador de variação 24h com cores
+                    </div>
+                </div>
+
+                <!-- Light Version with Live Data -->
+                <div class="logo-card" style="grid-column: span 2;">
+                    <h2>Versão Light (Dados Reais da API)</h2>
+                    <div style="background: #f8fafc; border-radius: 12px; padding: 30px;">
+                        <div id="loadingLight" style="text-align: center; color: #EA580C; padding: 40px;">
+                            <p>⏳ Carregando dados da CoinGecko API...</p>
+                        </div>
+                        <!-- Filter Trigger Button Light -->
+                        <button class="filter-trigger-btn" onclick="toggleModal('light', true)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                            </svg>
+                            Filtros
+                        </button>
+
+                        <!-- Modal Filter Light -->
+                        <div id="modalLight" class="modal-overlay light-theme-modal"
+                            onclick="toggleModal('light', false)">
+                            <div class="modal-content" onclick="event.stopPropagation()">
+                                <div class="filter-header">
+                                    <h3>Filtros Avançados</h3>
+                                    <button class="close-modal" onclick="toggleModal('light', false)">×</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Rede</label>
+                                    <select id="chainFilterLight" onchange="syncFilters('light')">
+                                        <option value="all">Todas as Redes</option>
+                                        <option value="Ethereum">Ethereum</option>
+                                        <option value="Bitcoin">Bitcoin</option>
+                                        <option value="Base">Base</option>
+                                        <option value="Ronin">Ronin</option>
+                                        <option value="BNB Chain">BNB Chain</option>
+                                        <option value="Apechain">Apechain</option>
+                                        <option value="Berachain">Berachain</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Preço Mínimo (ETH)</label>
+                                    <div class="range-inputs">
+                                        <input type="number" id="minFloorLight" placeholder="Min" step="0.01"
+                                            oninput="syncFilters('light')">
+                                        <input type="number" id="maxFloorLight" placeholder="Max" step="0.01"
+                                            oninput="syncFilters('light')">
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Market Cap (ETH)</label>
+                                    <div class="range-inputs">
+                                        <input type="number" id="minMCapLight" placeholder="Min"
+                                            oninput="syncFilters('light')">
+                                        <input type="number" id="maxMCapLight" placeholder="Max"
+                                            oninput="syncFilters('light')">
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Volume 24h (ETH)</label>
+                                    <div class="range-inputs">
+                                        <input type="number" id="minVolLight" placeholder="Min"
+                                            oninput="syncFilters('light')">
+                                        <input type="number" id="maxVolLight" placeholder="Max"
+                                            oninput="syncFilters('light')">
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Tipo de Token</label>
+                                    <div class="radio-list">
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenTypeLight" value="all" checked
+                                                onclick="syncFilters('light')">
+                                            <span>All Standards</span>
+                                        </label>
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenTypeLight" value="ERC721"
+                                                onclick="syncFilters('light')">
+                                            <span>ERC721 (Standard)</span>
+                                        </label>
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenTypeLight" value="ERC1155"
+                                                onclick="syncFilters('light')">
+                                            <span>ERC1155 (Multi-token)</span>
+                                        </label>
+                                        <label class="radio-item">
+                                            <input type="radio" name="tokenTypeLight" value="ERC404"
+                                                onclick="syncFilters('light')">
+                                            <span>ERC404 (Experimental)</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button class="filter-trigger-btn"
+                                    style="position: static; width: 100%; margin-top: auto;"
+                                    onclick="toggleModal('light', false)">Aplicar Filtros</button>
+                            </div>
+                        </div>
+                        <table id="tableLight"
+                            style="width: 100%; border-collapse: separate; border-spacing: 0 12px; display: none;">
+                            <thead>
+                                <tr style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+                                    <th
+                                        style="text-align: left; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        NFT</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        Preço Mínimo</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        24h</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        Market Cap</th>
+                                    <th
+                                        style="text-align: right; padding: 12px 0; color: #64748b; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">
+                                        Volume 24h</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBodyLight">
+                            </tbody>
+                        </table>
+                        <div id="lastUpdateLight"></div>
+                    </div>
+                    <div class="specs" style="margin-top: 20px;">
+                        <strong>Características:</strong><br>
+                        • Dados em tempo real da CoinGecko API<br>
+                        • Atualização automática a cada 5 minutos<br>
+                        • Cards brancos com sombra sutil<br>
+                        • Indicador de variação 24h com cores
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            // Simple inline CoinGecko service
+            class CoinGeckoService {
+                constructor() {
+                    this.apiKey = 'CG-GDU3VeH78xk59W2X8UapjNeQ';
+                    this.baseUrl = 'https://api.coingecko.com/api/v3';
+                }
+
+                async request(endpoint, params = {}) {
+                    const url = new URL(`${this.baseUrl}${endpoint}`);
+                    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+                    const response = await fetch(url.toString(), {
+                        headers: {
+                            'x-cg-demo-api-key': this.apiKey,
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`API error: ${response.status}`);
+                    }
+
+                    return response.json();
+                }
+
+                async getTokenData(tokenIds) {
+                    return this.request('/coins/markets', {
+                        vs_currency: 'usd',
+                        ids: tokenIds.join(','),
+                        order: 'market_cap_desc',
+                        sparkline: 'false',
+                        price_change_percentage: '24h'
+                    });
+                }
+
+                async getNftData(nftId) {
+                    return this.request(`/nfts/${nftId}`);
+                }
+
+                async getEthPrice() {
+                    const data = await this.request('/simple/price', {
+                        ids: 'ethereum',
+                        vs_currencies: 'usd'
+                    });
+                    return data.ethereum.usd;
+                }
+            }
+
+            const coingecko = new CoinGeckoService();
+
+            // Real CoinGecko NFT IDs with metadata
+            const nftCollections = [
+                { id: 'pudgy-penguins', name: 'Pudgy Penguins', chain: 'Ethereum', type: 'ERC721' },
+                { id: 'azuki', name: 'Azuki', chain: 'Ethereum', type: 'ERC721' },
+                { id: 'cryptopunks', name: 'CryptoPunks', chain: 'Ethereum', type: 'ERC721' },
+                { id: 'bored-ape-yacht-club', name: 'Bored Ape YC', chain: 'Ethereum', type: 'ERC721' },
+                { id: 'nodemonkes', name: 'NodeMonkes', chain: 'Bitcoin', type: 'Ordinals' },
+                { id: 'basegods125', name: 'Base Gods', chain: 'Base', type: 'ERC721' },
+                { id: 'pixels-pets', name: 'Pixels Pets', chain: 'Ronin', type: 'ERC721' },
+                { id: 'a-kid', name: 'A KID', chain: 'Apechain', type: 'ERC721' },
+                { id: 'beranames', name: 'Beranames', chain: 'Berachain', type: 'ERC721' },
+                { id: 'pancake-squad', name: 'Pancake Squad', chain: 'BNB Chain', type: 'ERC721' },
+                { id: 'pandora', name: 'Pandora', chain: 'Ethereum', type: 'ERC404' }
+            ];
+
+            let cachedData = [];
+
+            function formatNumber(num) {
+                if (!num) return '0.00';
+                if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+                if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+                return num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function toggleModal(theme, show) {
+                const modalId = theme === 'dark' ? 'modalDark' : 'modalLight';
+                const modal = document.getElementById(modalId);
+                if (show) {
+                    modal.style.display = 'flex';
+                    setTimeout(() => modal.classList.add('active'), 10);
+                } else {
+                    modal.classList.remove('active');
+                    setTimeout(() => modal.style.display = 'none', 300);
+                }
+            }
+
+            function createRow(data, isDark = true) {
+                const metadata = nftCollections.find(c => c.id === data.id) || {};
+                const floorPriceEth = data.floor_price.native_currency;
+                const floorPriceUsd = data.floor_price.usd;
+                const change24h = data.floor_price_usd_24h_percentage_change || 0;
+                const marketCapEth = data.market_cap.native_currency;
+                const marketCapUsd = data.market_cap.usd;
+                const volume24hEth = data.volume_24h.native_currency;
+                const volume24hUsd = data.volume_24h.usd;
+
+                const changeColor = change24h >= 0 ? '#10b981' : '#ef4444';
+                const textColor = isDark ? '#e2e8f0' : '#1e293b';
+                const numberColor = isDark ? 'white' : '#0f172a';
+                const unitColor = isDark ? '#94a3b8' : '#64748b';
+                const chainTagBg = isDark ? 'rgba(234, 88, 12, 0.2)' : 'rgba(234, 88, 12, 0.1)';
+                const chainTagColor = '#EA580C';
+
+                return `
+                    <tr class="nft-row ${isDark ? 'dark' : 'light'}">
+                        <td style="padding: 16px 12px; border-radius: 8px 0 0 8px;">
+                            <div style="color: ${textColor}; font-weight: 600;">${data.name}</div>
+                            <div style="margin-top: 4px; display: flex; gap: 6px;">
+                                <span style="background: ${chainTagBg}; color: ${chainTagColor}; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 700; text-transform: uppercase;">${metadata.chain || 'NFT'}</span>
+                                <span style="background: ${isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'}; color: ${unitColor}; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 600;">${metadata.type || 'ERC721'}</span>
+                            </div>
+                        </td>
+                        <td style="padding: 16px 12px; text-align: right;">
+                            <div>
+                                <span style="font-size: 1.15rem; font-weight: 700; color: ${numberColor};">${floorPriceEth.toFixed(2)}</span>
+                                <span style="font-size: 0.8rem; color: ${unitColor}; margin-left: 2px;">ETH</span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: ${unitColor};">$${formatNumber(floorPriceUsd)}</div>
+                        </td>
+                        <td style="padding: 16px 12px; text-align: right;">
+                            <span style="color: ${changeColor}; font-weight: 600; font-size: 0.9rem;">
+                                ${change24h >= 0 ? '▲' : '▼'} ${Math.abs(change24h).toFixed(1)}%
+                            </span>
+                        </td>
+                        <td style="padding: 16px 12px; text-align: right;">
+                            <div>
+                                <span style="font-size: 1.15rem; font-weight: 700; color: ${numberColor};">${formatNumber(marketCapEth)}</span>
+                                <span style="font-size: 0.8rem; color: ${unitColor}; margin-left: 2px;">ETH</span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: ${unitColor};">$${formatNumber(marketCapUsd)}</div>
+                        </td>
+                        <td style="padding: 16px 12px; text-align: right; border-radius: 0 8px 8px 0;">
+                            <div>
+                                <span style="font-size: 1.15rem; font-weight: 700; color: ${numberColor};">${volume24hEth.toFixed(2)}</span>
+                                <span style="font-size: 0.8rem; color: ${unitColor}; margin-left: 2px;">ETH</span>
+                            </div>
+                            <div style="font-size: 0.75rem; color: ${unitColor};">$${formatNumber(volume24hUsd)}</div>
+                        </td>
+                    </tr>
+                `;
+            }
+
+            function syncFilters(source) {
+                const isLight = source === 'light';
+                const suffix = isLight ? 'Light' : '';
+                const otherSuffix = isLight ? '' : 'Light';
+
+                // Sync values
+                document.getElementById('chainFilter' + otherSuffix).value = document.getElementById('chainFilter' + suffix).value;
+                document.getElementById('minFloor' + otherSuffix).value = document.getElementById('minFloor' + suffix).value;
+                document.getElementById('maxFloor' + otherSuffix).value = document.getElementById('maxFloor' + suffix).value;
+                document.getElementById('minMCap' + otherSuffix).value = document.getElementById('minMCap' + suffix).value;
+                document.getElementById('maxMCap' + otherSuffix).value = document.getElementById('maxMCap' + suffix).value;
+                document.getElementById('minVol' + otherSuffix).value = document.getElementById('minVol' + suffix).value;
+                document.getElementById('maxVol' + otherSuffix).value = document.getElementById('maxVol' + suffix).value;
+
+                const checkedVal = document.querySelector(`input[name="tokenType${suffix}"]:checked`).value;
+                document.querySelector(`input[name="tokenType${otherSuffix}"][value="${checkedVal}"]`).checked = true;
+
+                applyFiltersAndRender();
+            }
+
+            function applyFiltersAndRender() {
+                const chain = document.getElementById('chainFilter').value;
+                const type = document.querySelector('input[name="tokenType"]:checked').value;
+                const minFloor = parseFloat(document.getElementById('minFloor').value) || 0;
+                const maxFloor = parseFloat(document.getElementById('maxFloor').value) || Infinity;
+                const minMCap = parseFloat(document.getElementById('minMCap').value) || 0;
+                const maxMCap = parseFloat(document.getElementById('maxMCap').value) || Infinity;
+                const minVol = parseFloat(document.getElementById('minVol').value) || 0;
+                const maxVol = parseFloat(document.getElementById('maxVol').value) || Infinity;
+
+                const filteredData = cachedData.filter(d => {
+                    const metadata = nftCollections.find(c => c.id === d.id) || {};
+                    const matchesChain = chain === 'all' || metadata.chain === chain;
+                    const matchesType = type === 'all' || metadata.type === type;
+                    const matchesFloor = d.floor_price.native_currency >= minFloor && d.floor_price.native_currency <= maxFloor;
+                    const matchesMCap = d.market_cap.native_currency >= minMCap && d.market_cap.native_currency <= maxMCap;
+                    const matchesVolume = d.volume_24h.native_currency >= minVol && d.volume_24h.native_currency <= maxVol;
+
+                    return matchesChain && matchesType && matchesFloor && matchesMCap && matchesVolume;
+                });
+
+                const darkBody = document.getElementById('tableBodyDark');
+                const lightBody = document.getElementById('tableBodyLight');
+
+                darkBody.innerHTML = filteredData.map(d => createRow(d, true)).join('');
+                lightBody.innerHTML = filteredData.map(d => createRow(d, false)).join('');
+
+                if (filteredData.length === 0) {
+                    const noDataMsg = `<tr><td colspan="5" style="text-align: center; padding: 40px; color: #64748b;">Nenhum NFT encontrado com estes filtros.</td></tr>`;
+                    darkBody.innerHTML = noDataMsg;
+                    lightBody.innerHTML = noDataMsg;
+                }
+            }
+
+            async function loadData() {
+                try {
+                    const now = new Date();
+
+                    // Fetch data for all collections in parallel
+                    const results = await Promise.all(
+                        nftCollections.map(async (collection) => {
+                            try {
+                                return await coingecko.getNftData(collection.id);
+                            } catch (e) {
+                                console.error(`Error fetching ${collection.id}:`, e);
+                                return null;
+                            }
+                        })
+                    );
+
+                    cachedData = results.filter(d => d !== null);
+
+                    // Initial render with filters applied (defaults)
+                    applyFiltersAndRender();
+
+                    document.getElementById('loadingDark').style.display = 'none';
+                    document.getElementById('loadingLight').style.display = 'none';
+                    document.getElementById('tableDark').style.display = 'table';
+                    document.getElementById('tableLight').style.display = 'table';
+
+                    const timeString = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                    const dateString = now.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+
+                    document.getElementById('lastUpdateDark').innerHTML = `
+                        <div style="text-align: right; margin-top: 12px; font-size: 0.75rem; color: #64748b;">
+                            <span style="opacity: 0.7;">Última atualização:</span> 
+                            <span style="font-weight: 600;">${timeString}</span> • ${dateString}
+                        </div>
+                    `;
+
+                    document.getElementById('lastUpdateLight').innerHTML = `
+                        <div style="text-align: right; margin-top: 12px; font-size: 0.75rem; color: #64748b;">
+                            <span style="opacity: 0.7;">Última atualização:</span> 
+                            <span style="font-weight: 600;">${timeString}</span> • ${dateString}
+                        </div>
+                    `;
+
+                    document.getElementById('loadingLight').style.display = 'none';
+                    document.getElementById('tableLight').style.display = 'table';
+                } catch (error) {
+                    console.error('Error loading data:', error);
+                    document.getElementById('loadingDark').innerHTML = '<p style="color: #ef4444;">❌ Erro ao carregar dados</p>';
+                    document.getElementById('loadingLight').innerHTML = '<p style="color: #ef4444;">❌ Erro ao carregar dados</p>';
+                }
+            }
+
+            // Expose to global scope for inline onclick handlers
+            window.toggleModal = toggleModal;
+            window.syncFilters = syncFilters;
+            window.applyFiltersAndRender = applyFiltersAndRender;
+
+            // Load data on page load
+            loadData();
+
+            // Refresh every 5 minutes
+            setInterval(loadData, 300000);
+        </script>
+    </div>
+</body>
+
+</html>
