@@ -132,7 +132,11 @@ export default function Home() {
                 <div className="relative group perspective-1000">
                   <div className="absolute inset-0 bg-orange-600/20 blur-2xl group-hover:bg-orange-600/30 transition-all rounded-3xl -z-10 transform group-hover:scale-105 duration-500"></div>
                   <div className="relative transform transition-transform duration-700 group-hover:rotate-1">
-                    <VideoPlaceholder label="AMM Mechanics" duration="1:24" />
+                    <VideoPlaceholder
+                      label="AMM Mechanics"
+                      duration="1:24"
+                      embedUrl="https://www.loom.com/embed/9db8eb5ad49f4e5fbf7cfae7c7e9ae96"
+                    />
                   </div>
                 </div>
               </div>
@@ -146,7 +150,11 @@ export default function Home() {
                 <div className="order-2 lg:order-1 relative group perspective-1000">
                   <div className="absolute inset-0 bg-blue-600/20 blur-2xl group-hover:bg-blue-600/30 transition-all rounded-3xl -z-10 transform group-hover:scale-105 duration-500"></div>
                   <div className="relative transform transition-transform duration-700 group-hover:-rotate-1">
-                    <VideoPlaceholder label="Smart Routing Demo" duration="0:58" />
+                    <VideoPlaceholder
+                      label="Smart Routing Demo"
+                      duration="0:58"
+                      embedUrl="https://www.loom.com/embed/ba9644750d8c4ba6aff556685953c754"
+                    />
                   </div>
                 </div>
 
@@ -190,7 +198,11 @@ export default function Home() {
                 <div className="relative group perspective-1000">
                   <div className="absolute inset-0 bg-red-600/20 blur-2xl group-hover:bg-red-600/30 transition-all rounded-3xl -z-10 transform group-hover:scale-105 duration-500"></div>
                   <div className="relative transform transition-transform duration-700 group-hover:rotate-1">
-                    <VideoPlaceholder label="Cross-Chain Transfer" duration="2:10" />
+                    <VideoPlaceholder
+                      label="Cross-Chain Transfer"
+                      duration="2:10"
+                      embedUrl="https://www.youtube.com/embed/xNfBCaT4ljY"
+                    />
                   </div>
                 </div>
               </div>
@@ -199,7 +211,7 @@ export default function Home() {
 
           {/* How it works */}
           <section id="how-it-works" className="py-32 relative border-t border-white/5">
-            <div className="mx-auto max-w-7xl px-6">
+            <div id="docs" className="mx-auto max-w-7xl px-6">
               <h2 className="text-3xl font-bold text-white mb-20 text-center">How it works</h2>
 
               <div className="grid md:grid-cols-3 gap-8 text-center">
