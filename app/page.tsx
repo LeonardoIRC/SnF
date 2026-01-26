@@ -28,13 +28,12 @@ export default function Home() {
               </div>
             </Link>
 
-            <a
-              href="https://sweepnflip.io"
-              target="_blank"
+            <Link
+              href="/community"
               className="rounded-full bg-gradient-to-r from-orange-600 to-red-600 px-6 py-2 text-xs font-bold text-white shadow-lg shadow-orange-900/20 hover:scale-105 transition-transform"
             >
               Launch dApp
-            </a>
+            </Link>
           </div>
         </header>
 
@@ -57,13 +56,12 @@ export default function Home() {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-              <a
-                href="https://sweepnflip.io"
-                target="_blank"
+              <Link
+                href="/community"
                 className="w-full sm:w-auto rounded-full bg-gradient-to-r from-orange-600 to-red-600 px-10 py-4 text-sm font-bold text-white shadow-xl shadow-orange-900/30 hover:shadow-orange-900/50 hover:-translate-y-1 transition-all duration-300"
               >
                 Launch dApp
-              </a>
+              </Link>
               <a
                 href="#how-it-works"
                 className="w-full sm:w-auto group rounded-full px-10 py-4 text-sm font-bold text-white border border-white/10 bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-300 flex items-center justify-center gap-2"
@@ -81,7 +79,7 @@ export default function Home() {
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/50 p-10 hover:bg-slate-900/80 transition-all hover:border-orange-500/20">
                   <div className="mb-6 inline-flex rounded-xl bg-orange-500/10 p-3 text-orange-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="12" y1="20" x2="12" y2="10"></line>
                       <line x1="18" y1="20" x2="18" y2="4"></line>
                       <line x1="6" y1="20" x2="6" y2="16"></line>
@@ -95,7 +93,7 @@ export default function Home() {
 
                 <div className="group relative overflow-hidden rounded-3xl border border-white/5 bg-slate-900/50 p-10 hover:bg-slate-900/80 transition-all hover:border-red-500/20">
                   <div className="mb-6 inline-flex rounded-xl bg-red-500/10 p-3 text-red-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="2" y1="12" x2="22" y2="12"></line>
                       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
@@ -134,8 +132,8 @@ export default function Home() {
                   <div className="relative transform transition-transform duration-700 group-hover:rotate-1">
                     <VideoPlaceholder
                       label="AMM Mechanics"
-                      duration="1:24"
-                      embedUrl="https://www.loom.com/embed/9db8eb5ad49f4e5fbf7cfae7c7e9ae96"
+                      duration="0:56"
+                      embedUrl="https://www.youtube.com/watch?v=NvFGoz2cLB0"
                     />
                   </div>
                 </div>
@@ -152,8 +150,8 @@ export default function Home() {
                   <div className="relative transform transition-transform duration-700 group-hover:-rotate-1">
                     <VideoPlaceholder
                       label="Smart Routing Demo"
-                      duration="0:58"
-                      embedUrl="https://www.loom.com/embed/ba9644750d8c4ba6aff556685953c754"
+                      duration="4:12"
+                      embedUrl="https://www.youtube.com/watch?v=c1VaItK9fCw"
                     />
                   </div>
                 </div>
@@ -201,7 +199,7 @@ export default function Home() {
                     <VideoPlaceholder
                       label="Cross-Chain Transfer"
                       duration="2:10"
-                      embedUrl="https://www.youtube.com/embed/xNfBCaT4ljY"
+                      embedUrl="https://www.youtube.com/watch?v=5D9tJ-WK5D4"
                     />
                   </div>
                 </div>
@@ -218,7 +216,7 @@ export default function Home() {
                 <div className="relative p-8 group">
                   <div className="absolute inset-0 border border-white/5 bg-white/[0.02] rounded-3xl -z-10 group-hover:border-orange-500/20 transition-all"></div>
                   <div className="mb-6 inline-flex rounded-2xl bg-orange-500/10 p-4 text-orange-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
                       <path d="M2 8h16v8H2z"></path>
                       <line x1="6" y1="8" x2="6" y2="16"></line>
@@ -232,7 +230,7 @@ export default function Home() {
                 <div className="relative p-8 group">
                   <div className="absolute inset-0 border border-white/5 bg-white/[0.02] rounded-3xl -z-10 group-hover:border-orange-500/20 transition-all"></div>
                   <div className="mb-6 inline-flex rounded-2xl bg-orange-500/10 p-4 text-orange-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M2 15V9a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2z"></path>
                       <path d="M7 10v4"></path>
                       <path d="M12 10v4"></path>
@@ -246,7 +244,7 @@ export default function Home() {
                 <div className="relative p-8 group">
                   <div className="absolute inset-0 border border-white/5 bg-white/[0.02] rounded-3xl -z-10 group-hover:border-orange-500/20 transition-all"></div>
                   <div className="mb-6 inline-flex rounded-2xl bg-orange-500/10 p-4 text-orange-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="m16 3 4 4-4 4"></path>
                       <path d="M20 7H4"></path>
                       <path d="m8 21-4-4 4-4"></path>

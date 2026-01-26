@@ -1,43 +1,40 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect, useCallback } from "react"
+import { createPortal } from "react-dom"
 import type { VideoConfig } from "./videos"
 
-function getEmbedUrl(video?: VideoConfig, directEmbedUrl?: string) {
-  const url = directEmbedUrl || video?.youtubeUrl
+function getYouTubeId(url: string | null | undefined) {
   if (!url) return null
-
   try {
     const u = new URL(url)
-
-    // YouTube
     if (u.hostname.includes("youtu.be")) {
-      const id = u.pathname.replace("/", "")
-      return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null
+      return u.pathname.replace("/", "")
     }
     if (u.hostname.includes("youtube.com")) {
       const id = u.searchParams.get("v")
-      if (id) return `https://www.youtube.com/embed/${id}?autoplay=1`
-
-      // Handle /shorts/ or /embed/ paths
+      if (id) return id
       if (u.pathname.includes("/shorts/") || u.pathname.includes("/embed/")) {
-        const idFromPath = u.pathname.split("/").pop()
-        return idFromPath ? `https://www.youtube.com/embed/${idFromPath}?autoplay=1` : null
+        return u.pathname.split("/").pop()
       }
-      return null
     }
-
-    // Loom
-    if (u.hostname.includes("loom.com")) {
-      if (u.pathname.includes("/embed/")) return `${url}${url.includes('?') ? '&' : '?'}autoplay=1`
-      const id = u.pathname.split("/").pop()
-      return id ? `https://www.loom.com/embed/${id}?autoplay=1` : null
-    }
-
-    return url
+    return null
   } catch {
-    return url
+    return null
   }
+}
+
+function getEmbedUrl(youtubeId: string | null, rawUrl: string | null | undefined) {
+  if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1`
+
+  if (rawUrl?.includes("loom.com")) {
+    const u = new URL(rawUrl)
+    if (u.pathname.includes("/embed/")) return `${rawUrl}${rawUrl.includes('?') ? '&' : '?'}autoplay=1`
+    const id = u.pathname.split("/").pop()
+    return id ? `https://www.loom.com/embed/${id}?autoplay=1` : null
+  }
+
+  return rawUrl || null
 }
 
 export function VideoPlaceholder({
@@ -52,12 +49,38 @@ export function VideoPlaceholder({
   embedUrl?: string
 }) {
   const [open, setOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const close = useCallback(() => setOpen(false), [])
+
+  // Lock scroll and handle Escape key
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden"
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === "Escape") close()
+      }
+      window.addEventListener("keydown", handleEscape)
+      return () => {
+        document.body.style.overflow = "unset"
+        window.removeEventListener("keydown", handleEscape)
+      }
+    }
+  }, [open, close])
 
   const displayLabel = label || video?.label || "Video Demo"
   const displayDuration = duration || video?.duration || "0:00"
-  const youtubeUrl = video?.youtubeUrl || (embedUrl?.includes("youtube.com") ? embedUrl : undefined)
 
-  const embedSrc = useMemo(() => getEmbedUrl(video, embedUrl), [video, embedUrl])
+  const rawUrl = embedUrl || video?.youtubeUrl
+  const youtubeId = useMemo(() => getYouTubeId(rawUrl), [rawUrl])
+
+  const youtubeUrl = youtubeId ? `https://www.youtube.com/watch?v=${youtubeId}` : (rawUrl?.includes("youtube.com") || rawUrl?.includes("youtu.be") ? rawUrl : undefined)
+  const embedSrc = useMemo(() => getEmbedUrl(youtubeId, rawUrl), [youtubeId, rawUrl])
+  const thumbnailUrl = youtubeId ? `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg` : null
 
   return (
     <>
@@ -72,6 +95,19 @@ export function VideoPlaceholder({
       >
         {/* Dynamic Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
+
+        {/* Video Thumbnail */}
+        {thumbnailUrl && (
+          <div className="absolute inset-0 z-0">
+            <img
+              src={thumbnailUrl}
+              alt={displayLabel}
+              className="w-full h-full object-cover opacity-40 transition-all duration-700 group-hover:scale-105 group-hover:opacity-60"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-slate-950/40 group-hover:bg-slate-950/20 transition-colors duration-500" />
+          </div>
+        )}
 
         {/* Grid Pattern with Pulse */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-10 mix-blend-overlay" />
@@ -140,14 +176,19 @@ export function VideoPlaceholder({
       </div>
 
       {/* Modal Overlay */}
-      {open && (
-        <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="relative w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+      {open && mounted && createPortal(
+        <div
+          className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4 animate-modal-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) close()
+          }}
+        >
+          <div className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_100px_-12px_rgba(249,115,22,0.4)] animate-modal-zoom-in">
             {embedSrc ? (
               <iframe
                 className="w-full h-full"
                 src={embedSrc}
-                allow="autoplay; encrypted-media; fullscreen"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
                 allowFullScreen
                 frameBorder="0"
               />
@@ -169,14 +210,19 @@ export function VideoPlaceholder({
                 </a>
               )}
               <button
-                onClick={() => setOpen(false)}
-                className="text-xs px-3 py-1 rounded bg-red-600/80 hover:bg-red-600 text-white transition-colors"
+                onClick={close}
+                className="group/close flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all hover:scale-105 active:scale-95 border border-white/10 backdrop-blur-md"
               >
-                Close
+                <span className="text-xs font-bold uppercase tracking-wider">Close</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white/70 group-hover/close:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   )
