@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect, useCallback } from "react"
 import { createPortal } from "react-dom"
 import type { VideoConfig } from "./videos"
 
-function getYouTubeId(url: string | null | undefined) {
+function getYouTubeId(url: string | null | undefined): string | null {
   if (!url) return null
   try {
     const u = new URL(url)
@@ -15,7 +15,7 @@ function getYouTubeId(url: string | null | undefined) {
       const id = u.searchParams.get("v")
       if (id) return id
       if (u.pathname.includes("/shorts/") || u.pathname.includes("/embed/")) {
-        return u.pathname.split("/").pop()
+        return u.pathname.split("/").pop() || null
       }
     }
     return null
@@ -24,14 +24,18 @@ function getYouTubeId(url: string | null | undefined) {
   }
 }
 
-function getEmbedUrl(youtubeId: string | null, rawUrl: string | null | undefined) {
+function getEmbedUrl(youtubeId: string | null, rawUrl: string | null | undefined): string | null {
   if (youtubeId) return `https://www.youtube.com/embed/${youtubeId}?autoplay=1`
 
-  if (rawUrl?.includes("loom.com")) {
-    const u = new URL(rawUrl)
-    if (u.pathname.includes("/embed/")) return `${rawUrl}${rawUrl.includes('?') ? '&' : '?'}autoplay=1`
-    const id = u.pathname.split("/").pop()
-    return id ? `https://www.loom.com/embed/${id}?autoplay=1` : null
+  if (rawUrl && rawUrl.includes("loom.com")) {
+    try {
+      const u = new URL(rawUrl)
+      if (u.pathname.includes("/embed/")) return `${rawUrl}${rawUrl.includes('?') ? '&' : '?'}autoplay=1`
+      const id = u.pathname.split("/").pop()
+      return id ? `https://www.loom.com/embed/${id}?autoplay=1` : null
+    } catch {
+      return null
+    }
   }
 
   return rawUrl || null
